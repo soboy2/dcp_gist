@@ -1,0 +1,32 @@
+<!DOCTYPE html/>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel = 'stylesheet' href='/stylesheets/style.css'/>
+  </head>
+  <body>
+    <h1>Gists</h1>
+    <p>Bookmarks</p>
+    <div id='bookmarks'>
+      <% gists.forEach(function(gist) { %>
+        <div class='bookmark'>
+          <h2><%=gist.name%></h2>
+          <!--<img src='<%=gist.path%>' /> -->
+        </div>
+      <% }) %>
+    </div>
+
+    <p>Reads</p>
+    <div id='gists'>
+      <% gists.forEach(function(gist) { %>
+        <div class='tweet'>
+          <h2><%=gist.name%></h2>
+          <img src='/photos/<%=gist.path%>'/>
+          <%=gist.content%>
+        </div>
+      <% }) %>
+    </div>
+
+
+  </body>
+</html>
