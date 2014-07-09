@@ -34,6 +34,7 @@ if ('development' == app.get('env')) {
 app.get('/', gists.list);
 app.get('/create', gists.form);
 app.post('/create', gists.submit(app.get('gist-photos')));
+app.post('/add', gists.add());
 app.get('/users', user.list);
 
 

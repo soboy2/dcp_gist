@@ -65,3 +65,26 @@ exports.submit = function(dir) {
 
   };
 };
+
+exports.add = function(){
+  return function(req, res, next){
+    var name = req.body.gist.name;
+    var path = req.body.gist.path;
+    var type = 'bookmark';
+    var content = req.body.gist.content;
+
+    Gist.create({
+        name: name,
+        path: path,
+        type: type,
+        content: content
+
+    }, function(err) {
+      if(err) {
+        return next(err);
+      }
+    });
+
+    res.json(200, {bookmark: "successful"});
+  };
+};
