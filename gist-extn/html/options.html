@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>myproduct Options</title>
+    <link href="options/options.css" rel="stylesheet">
+</head>
+
+<body>
+<header>
+    <h1>My KSA Prefs</h1>
+</header>
+<div id="status"></div>
+<div class="section">
+    <h3>Debug Mode:</h3>
+    Alt ID: <input type="text" id="alt_id">
+    <select id="debug_mode">
+         <option value="0">Off</option>
+         <option value="1">On</option>
+    </select>
+</div>
+
+
+<div class="section">
+    <h3>Environment:</h3>
+    <select id="env_mode">
+         <option value="0">Prod</option>
+         <option value="1">Local</option>
+    </select>
+</div>
+
+<br>
+<button id="save">Save</button>
+
+<script type="text/javascript" src="options/options.js"></script>
+
+</body>
+</html>
