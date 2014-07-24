@@ -1,0 +1,38 @@
+
+body{
+    direction: ltr;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    margin: 32px;
+    padding: 0;
+}
+
+header {
+    background: #f1f1f1;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 12px;
+    overflow: hidden;
+    height: 47px;
+    padding: 12px 0;
+}
+
+header > h1 {
+    line-height: 47px;
+    margin:0 0 0 24px;
+    text-indent: -9999px;
+    /*background: url(data/img/logo.png) no-repeat;*/
+    padding:0;
+}
+
+.section {
+    overflow: hidden;
+    padding: 12px 0;
+    border-top: solid 1px #eee;
+}
+
+h3 {
+    width: 180px;
+    float: left;
+    margin: 0;
+    padding: 0;
+}

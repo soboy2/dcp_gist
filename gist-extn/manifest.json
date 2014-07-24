@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+  "name": "dcp-gist",
+  "description": "This extension helps users bookmark websites they have been to",
+  "icons": {
+      "128": "images/icon_kroger.png",
+      "16": "images/icon_kroger.png",
+      "32": "images/icon_kroger.png",
+      "48": "images/icon_kroger.png"
+   },
+   "background": {
+      "scripts": ["/lib/parent/storage.js", "/lib/parent/background.js", "/lib/parent/listener.js"]
+   },
+  "content_scripts": [
+      {
+          "matches": ["http://*/","http://*/*","https://*/","https://*/*"],
+          "exclude_matches": ["http://www.kroger.com/"],
+          "js": ["lib/contentscript/util.js","lib/contentscript/content.js"],
+          "all_frames": false,
+          "run_at": "document_end"
+      }
+  ],
+  "version": "1.0",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "cookies",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "browser_action": {
+    "default_icon": "images/icon_kroger.png",
+    "default_title" : "Add to Gist"
+  },
+  "options_page": "html/options.html"
+}

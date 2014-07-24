@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../lib/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        .navbar-inner {
+            background-color: beige;
+        }
+
+        .navbar-form {
+          padding-top: 90px;
+        }
+
+        .deli-bakery a { 
+          padding-top: 63px !important; 
+          background: url(../images/basket-full.png) 16px 1px no-repeat;
+        } 
+
+        .jewelry a { 
+          padding-top: 63px !important; 
+          background: url(../images/shopping-bag.png) 16px 1px no-repeat;
+        } 
+
+        .pharmacy a { 
+          padding-top: 63px !important; 
+          background: url(../images/shop-open.png) 16px 1px no-repeat;
+        }
+
+        .banner a { 
+          padding-top: 63px !important; 
+          background: url(../images/full-cart.png) 16px 1px no-repeat;
+        }
+
+    </style>
+  </head>
+  <body class="toolbar">
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <ul class="nav nav-pills">
+            <li class="deli-bakery active">
+              <a href="https://www.kroger.com/onlinedeli/servlet/KRStoreFinderView?catalogId=10102&storeFinderPage=true&langId=-1&storeId=10154" target="_blank">
+                Deli/Bakery
+              </a>
+             <!--<img border="0" src="../images/basket-full.png" alt="Deli/Bakery" title="Deli/Bakery">-->
+            </li>
+            <li class="jewelry">
+              <a href="#" target="_blank">
+                Jewelry
+              </a>
+              <!--<img border="0" src="../images/shopping-bag.png" alt="Jewelry" title="Jewelry">-->
+            </li>
+            <li class="pharmacy">
+              <a href="http://www.kroger.com/pharmacy/Pages/default.aspx" target="_blank">
+                Pharmacy
+              </a>
+              <!--<img border="0" src="../images/shop-open.png" alt="Pharmacy" title="Pharmacy"> -->                     
+            </li>
+            <li class="banner">
+              <a href="http://www.kroger.com/Pages/default.aspx" target="_blank">
+                Banner
+              </a>
+              <!--<img border="0" src="../images/full-cart.png" alt="Banner" title="Banner">-->
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3">
+        <form class="navbar-form" role="search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
+        </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../lib/js/bootstrap.min.js"></script>
+  </body>
+</html>

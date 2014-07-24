@@ -1,0 +1,33 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.tweet {
+  display: inline-block;
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px #ddd;
+}
+
+.tweet {
+  margin: 0;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 200;
+}
+
+.tweet img {
+  height: 20px;
+}
+
+#tweet-message {
+  /*height:20px;*/
+  width: 762px;
+}

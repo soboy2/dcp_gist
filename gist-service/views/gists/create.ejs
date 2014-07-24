@@ -1,0 +1,26 @@
+<!DOCTYPE html/>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel = 'stylesheet' href='/stylesheets/style.css'/>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Share a team update</p>
+    <form method='post' enctype='multipart/form-data'>
+      <p>
+        <input type='text', name='gist[name]', placeholder='Topic'/>
+      </p>
+      <p>
+        <input id='tweet-message', type='text', name='gist[content]', placeholder='Message', maxlength="140"/>
+      </p>
+      <p>
+        <input type='file', name='gist[image]'/>
+      </p>
+
+      <p>
+        <input type='submit', value='Share'/>
+      </p>
+  </form>
+  </body>
+</html>
