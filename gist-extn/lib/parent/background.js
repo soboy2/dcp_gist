@@ -2,7 +2,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   // No tabs or host permissions needed!
   console.log('Bookmarking ' + tab.url);
 
-  dcpGist.bookmarkPage(tab.url);
+  dcpGist.bookmarkPage(tab);
+
   // chrome.tabs.executeScript({
   //   code: 'document.body.style.backgroundColor="red"'
   // });
@@ -94,11 +95,11 @@ var dcpGist = {
     }
   },
 
-  bookmarkPage: function(url) {
+  bookmarkPage: function(tab) {
     var self = this;
     var endpoint = dcpGist.vars.gistBookmarkUrl;
-    var gistName = "bookMark test";
-    var gistPath = url;
+    var gistName = tab.title;
+    var gistPath = tab.url;
     var gistContent = "Placeholder";
     //var params = "gist[name]=name&gist[path]="+ url + "&gist[content]=''";
     var response = dcpGist.makePostRequest({url:endpoint,
