@@ -1,12 +1,52 @@
+chrome.tabs.onCreated.addListener(function() {
+    console.log('Setting icon');
+    chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+});
+
+chrome.tabs.onActivated.addListener(function(info) {
+  var tab = chrome.tabs.get(info.tabId, function(tab) {
+    var bookmarks = localStorage.getItem("dcp-gist");
+    if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+      var marked = bookmarks.indexOf(tab.url);
+      if(marked == -1){
+      //alert("page not bookmarked");
+        chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+      } else {
+        chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
+      }
+    } else {
+      //alert('no bookmarks exist');
+    }
+  });
+
+});
+
+
 chrome.browserAction.onClicked.addListener(function(tab) {
   // No tabs or host permissions needed!
   console.log('Bookmarking ' + tab.url);
 
   dcpGist.bookmarkPage(tab);
 
-  // chrome.tabs.executeScript({
-  //   code: 'document.body.style.backgroundColor="red"'
-  // });
+  chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
+
+  if(typeof(Storage) !== "undefined") {
+    // Code for localStorage
+    var bookmarks = localStorage.getItem("dcp-gist");
+    if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+      bookmarks[bookmarks.length] = tab.url;
+
+    } else {
+      //alert('no bookmarks exist');
+      bookmarks = [tab.url];
+    }
+
+    localStorage.setItem("dcp-gist", bookmarks);
+
+  } else {
+    // Sorry! No Web Storage support..
+  }
+
 });
 
 
@@ -21,8 +61,9 @@ var dcpGist = {
 
         dg.vars = {
             url:'https://localhost:8443/KSAService/',
-            gistBookmarkUrl: 'http://localhost:3000/add',
+            gistBookmarkUrl:'https://still-fortress-7308.herokuapp.com/articles',
             serviceBaseUrl: 'http://localhost:8080/chromeextension/'/*,
+            //gistBookmarkUrl: 'http://localhost:3000/add',
             urlParams:{}*/
         };
 
@@ -108,8 +149,8 @@ var dcpGist = {
                                               gistContent: gistContent,
                                                 overrideMimeType: "application/json",
                                                 onComplete: function(response){
-                                                  var result = self.parseJson(response)
-                                                  //self.displayBadgeInfo(result.fuel_points + "day");
+                                                  //var result = self.parseJson(response)
+
                                                 }
                                               });
   }
