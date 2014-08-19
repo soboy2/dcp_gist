@@ -21,6 +21,19 @@ chrome.tabs.onActivated.addListener(function(info) {
 
 });
 
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
+  if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+    var marked = bookmarks.indexOf(tab.url);
+    if(marked == -1){
+      //alert("page not bookmarked");
+      chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+    } else {
+      chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
+    }
+  }
+});
+
 
 chrome.browserAction.onClicked.addListener(function(tab) {
   // No tabs or host permissions needed!
