@@ -5,7 +5,7 @@ chrome.tabs.onCreated.addListener(function() {
 
 chrome.tabs.onActivated.addListener(function(info) {
   var tab = chrome.tabs.get(info.tabId, function(tab) {
-    var bookmarks = localStorage.getItem("dcp-gist");
+    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
     if(typeof bookmarks !== 'undefined' && bookmarks !== null){
       var marked = bookmarks.indexOf(tab.url);
       if(marked == -1){
@@ -32,16 +32,19 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
   if(typeof(Storage) !== "undefined") {
     // Code for localStorage
-    var bookmarks = localStorage.getItem("dcp-gist");
+
+    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
     if(typeof bookmarks !== 'undefined' && bookmarks !== null){
       bookmarks[bookmarks.length] = tab.url;
 
     } else {
       //alert('no bookmarks exist');
-      bookmarks = [tab.url];
+      bookmarks = [];
+      bookmarks[0] = tab.url;
+      //bookmarks = [tab.url];
     }
 
-    localStorage.setItem("dcp-gist", bookmarks);
+    localStorage.setItem("dcp-gist", JSON.stringify(bookmarks));
 
   } else {
     // Sorry! No Web Storage support..
