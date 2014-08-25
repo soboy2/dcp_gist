@@ -77,12 +77,24 @@ var dcpGist = {
 
         dg.vars = {
             url:'https://localhost:8443/KSAService/',
-            gistBookmarkUrl:'https://still-fortress-7308.herokuapp.com/articles',
+            gistBookmarkUrl:'http://mighty-woodland-8571.herokuapp.com/articles',
             serviceBaseUrl: 'http://localhost:8080/chromeextension/'/*,
             //gistBookmarkUrl: 'http://localhost:3000/add',
             urlParams:{}*/
         };
 
+  },
+
+  setIcon: function(tab) {
+    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
+    if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+      var marked = bookmarks.indexOf(tab.url);
+      if(marked == -1){
+        chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+      } else {
+        chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
+      }
+    }
   },
 
   parseJson: function(str) {
