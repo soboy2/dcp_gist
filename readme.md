@@ -1,3 +1,4 @@
-#DCP Gist
->This is a basic nodejs web application to share tweets and bookmark
-webpages
+dcp_gist
+========
+
+Basic Express Web App and Service to share internal tweets and bookmark webpages 
