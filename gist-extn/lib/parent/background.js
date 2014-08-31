@@ -1,11 +1,68 @@
+chrome.tabs.onCreated.addListener(function() {
+    console.log('Setting icon');
+    chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+});
+
+chrome.tabs.onActivated.addListener(function(info) {
+  var tab = chrome.tabs.get(info.tabId, function(tab) {
+    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
+    if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+      var marked = bookmarks.indexOf(tab.url);
+      if(marked == -1){
+      //alert("page not bookmarked");
+        chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+      } else {
+        chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
+      }
+    } else {
+      //alert('no bookmarks exist');
+    }
+  });
+
+});
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
+  if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+    var marked = bookmarks.indexOf(tab.url);
+    if(marked == -1){
+      //alert("page not bookmarked");
+      chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+    } else {
+      chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
+    }
+  }
+});
+
+
 chrome.browserAction.onClicked.addListener(function(tab) {
   // No tabs or host permissions needed!
   console.log('Bookmarking ' + tab.url);
 
-  dcpGist.bookmarkPage(tab.url);
-  // chrome.tabs.executeScript({
-  //   code: 'document.body.style.backgroundColor="red"'
-  // });
+  dcpGist.bookmarkPage(tab);
+
+  chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
+
+  if(typeof(Storage) !== "undefined") {
+    // Code for localStorage
+
+    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
+    if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+      bookmarks[bookmarks.length] = tab.url;
+
+    } else {
+      //alert('no bookmarks exist');
+      bookmarks = [];
+      bookmarks[0] = tab.url;
+      //bookmarks = [tab.url];
+    }
+
+    localStorage.setItem("dcp-gist", JSON.stringify(bookmarks));
+
+  } else {
+    // Sorry! No Web Storage support..
+  }
+
 });
 
 
@@ -20,11 +77,24 @@ var dcpGist = {
 
         dg.vars = {
             url:'https://localhost:8443/KSAService/',
-            gistBookmarkUrl: 'http://localhost:3000/add',
+            gistBookmarkUrl:'http://mighty-woodland-8571.herokuapp.com/articles',
             serviceBaseUrl: 'http://localhost:8080/chromeextension/'/*,
+            //gistBookmarkUrl: 'http://localhost:3000/add',
             urlParams:{}*/
         };
 
+  },
+
+  setIcon: function(tab) {
+    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
+    if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+      var marked = bookmarks.indexOf(tab.url);
+      if(marked == -1){
+        chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+      } else {
+        chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
+      }
+    }
   },
 
   parseJson: function(str) {
@@ -94,11 +164,11 @@ var dcpGist = {
     }
   },
 
-  bookmarkPage: function(url) {
+  bookmarkPage: function(tab) {
     var self = this;
     var endpoint = dcpGist.vars.gistBookmarkUrl;
-    var gistName = "bookMark test";
-    var gistPath = url;
+    var gistName = tab.title;
+    var gistPath = tab.url;
     var gistContent = "Placeholder";
     //var params = "gist[name]=name&gist[path]="+ url + "&gist[content]=''";
     var response = dcpGist.makePostRequest({url:endpoint,
@@ -107,8 +177,8 @@ var dcpGist = {
                                               gistContent: gistContent,
                                                 overrideMimeType: "application/json",
                                                 onComplete: function(response){
-                                                  var result = self.parseJson(response)
-                                                  //self.displayBadgeInfo(result.fuel_points + "day");
+                                                  //var result = self.parseJson(response)
+
                                                 }
                                               });
   }
