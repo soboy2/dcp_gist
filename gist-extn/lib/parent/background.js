@@ -5,34 +5,18 @@ chrome.tabs.onCreated.addListener(function() {
 
 chrome.tabs.onActivated.addListener(function(info) {
   var tab = chrome.tabs.get(info.tabId, function(tab) {
-    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
-    if(typeof bookmarks !== 'undefined' && bookmarks !== null){
-      var marked = bookmarks.indexOf(tab.url);
-      if(marked == -1){
-      //alert("page not bookmarked");
-        chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
-      } else {
-        chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
-      }
-    } else {
-      //alert('no bookmarks exist');
-    }
+    dcpGist.setIcon(tab);
+
   });
 
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
-  if(typeof bookmarks !== 'undefined' && bookmarks !== null){
-    var marked = bookmarks.indexOf(tab.url);
-    if(marked == -1){
-      //alert("page not bookmarked");
-      chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
-    } else {
-      chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
-    }
-  }
+
+  dcpGist.setIcon(tab);
+
 });
+
 
 
 chrome.browserAction.onClicked.addListener(function(tab) {
@@ -44,17 +28,13 @@ chrome.browserAction.onClicked.addListener(function(tab) {
   chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
 
   if(typeof(Storage) !== "undefined") {
-    // Code for localStorage
 
     var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
-    if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+    if(dcpGist.isUndefined(bookmarks) && dcpGist.isNull(bookmarks)){
       bookmarks[bookmarks.length] = tab.url;
-
     } else {
-      //alert('no bookmarks exist');
       bookmarks = [];
       bookmarks[0] = tab.url;
-      //bookmarks = [tab.url];
     }
 
     localStorage.setItem("dcp-gist", JSON.stringify(bookmarks));
@@ -87,9 +67,9 @@ var dcpGist = {
 
   setIcon: function(tab) {
     var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
-    if(typeof bookmarks !== 'undefined' && bookmarks !== null){
+    if(dcpGist.isUndefined(bookmarks) && dcpGist.isNull(bookmarks)){
       var marked = bookmarks.indexOf(tab.url);
-      if(marked == -1){
+      if(dcpGist.pageNotBookmarked(marked)){
         chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
       } else {
         chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
@@ -181,7 +161,32 @@ var dcpGist = {
 
                                                 }
                                               });
+  },
+
+  pageNotBookmarked: function(marked) {
+    if(marked == -1){
+      return true;
+    }else{
+      return false;
+    }
+  },
+
+  isUndefined: function(obj) {
+    if(typeof obj !== 'undefined') {
+      return false;
+    } else {
+      return true;
+    }
+  },
+
+  isNull: function(obj) {
+    if(obj !== null) {
+      return false;
+    } else {
+      return true;
+    }
   }
+
 };
 
 
