@@ -20,7 +20,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-  // No tabs or host permissions needed!
   console.log('Bookmarking ' + tab.url);
 
   dcpGist.bookmarkPage(tab);
@@ -63,6 +62,18 @@ var dcpGist = {
             urlParams:{}*/
         };
 
+  },
+
+  isBookmarked: function(url) {
+    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
+    if(dcpGist.isUndefined(bookmarks) && dcpGist.isNull(bookmarks)){
+      var marked = bookmarks.indexOf(tab.url);
+      if(dcpGist.pageNotBookmarked(marked)){
+        return false;
+      }
+    }
+
+    return false;
   },
 
   setIcon: function(tab) {
