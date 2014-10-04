@@ -3,10 +3,10 @@
   "name": "dcp-gist",
   "description": "This extension helps users bookmark websites they have been to",
   "icons": {
-      "128": "images/icon_kroger.png",
-      "16": "images/icon_kroger.png",
-      "32": "images/icon_kroger.png",
-      "48": "images/icon_kroger.png"
+      "128": "images/icon.png",
+      "16": "images/icon.png",
+      "32": "images/icon.png",
+      "48": "images/icon.png"
    },
    "background": {
       "scripts": ["/lib/parent/storage.js", "/lib/parent/background.js"]
@@ -29,7 +29,7 @@
     "https://*/*"
   ],
   "browser_action": {
-    "default_icon": "images/icon_kroger.png",
+    "default_icon": "images/icon.png",
     "default_title" : "Add to Gist"
   },
   "options_page": "html/options.html"

@@ -1,6 +1,6 @@
 chrome.tabs.onCreated.addListener(function() {
     console.log('Setting icon');
-    chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+    chrome.browserAction.setIcon({path:'images/icon.png'});
 });
 
 chrome.tabs.onActivated.addListener(function(info) {
@@ -22,21 +22,30 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 chrome.browserAction.onClicked.addListener(function(tab) {
   console.log('Bookmarking ' + tab.url);
 
-  dcpGist.bookmarkPage(tab);
-
-  chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
-
   if(typeof(Storage) !== "undefined") {
 
     var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
     if(dcpGist.isUndefined(bookmarks) && dcpGist.isNull(bookmarks)){
-      bookmarks[bookmarks.length] = tab.url;
-    } else {
       bookmarks = [];
       bookmarks[0] = tab.url;
+      dcpGist.markPage(tab, 'bookmark');
+      chrome.browserAction.setIcon({path:'images/icon_active.png'});
+      localStorage.setItem("dcp-gist", JSON.stringify(bookmarks));
+
+    } else {
+      if(dcpGist.isBookmarked(bookmarks, tab.url)){
+        dcpGist.removeBookmark(bookmarks, tab.url);
+        dcpGist.markPage(tab, 'unbookmark');
+        chrome.browserAction.setIcon({path:'images/icon.png'});
+      }else{
+        bookmarks[bookmarks.length] = tab.url;
+        dcpGist.markPage(tab, 'bookmark');
+        chrome.browserAction.setIcon({path:'images/icon_active.png'});
+        localStorage.setItem("dcp-gist", JSON.stringify(bookmarks));
+      }
     }
 
-    localStorage.setItem("dcp-gist", JSON.stringify(bookmarks));
+
 
   } else {
     // Sorry! No Web Storage support..
@@ -56,7 +65,8 @@ var dcpGist = {
 
         dg.vars = {
             url:'https://localhost:8443/KSAService/',
-            gistBookmarkUrl:'http://mighty-woodland-8571.herokuapp.com/articles',
+            gistBookmarkUrl: 'http://mighty-woodland-8571.herokuapp.com/articles',
+            voteBookmarkUrl: 'http://mighty-woodland-8571.herokuapp.com/vote',
             serviceBaseUrl: 'http://localhost:8080/chromeextension/'/*,
             //gistBookmarkUrl: 'http://localhost:3000/add',
             urlParams:{}*/
@@ -64,26 +74,47 @@ var dcpGist = {
 
   },
 
-  isBookmarked: function(url) {
-    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
+  isBookmarked: function(bookmarks, url) {
     if(dcpGist.isUndefined(bookmarks) && dcpGist.isNull(bookmarks)){
-      var marked = bookmarks.indexOf(tab.url);
-      if(dcpGist.pageNotBookmarked(marked)){
+      return false;
+    } else {
+      if(dcpGist.getBookmarkIndex(bookmarks, url) == -1){
         return false;
       }
+      else{
+        return true;
+      }
     }
+  },
 
-    return false;
+  getBookmarkIndex: function(bookmarks, url) {
+    var bookmarkIndex = bookmarks.indexOf(url);
+    return bookmarkIndex;
+  },
+
+  getBookmarks: function() {
+    var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
+    return bookmarks;
+  },
+
+  storeBookmarksToLocalStorage: function(bookmarks) {
+    localStorage.setItem("dcp-gist", JSON.stringify(bookmarks));
+  },
+
+  removeBookmark: function(bookmarks, url) {
+    var bookmarkIndex = bookmarks.indexOf(url);
+    bookmarks.splice(bookmarkIndex, 1);
+    dcpGist.storeBookmarksToLocalStorage(bookmarks);
   },
 
   setIcon: function(tab) {
     var bookmarks = JSON.parse(localStorage.getItem("dcp-gist"));
-    if(dcpGist.isUndefined(bookmarks) && dcpGist.isNull(bookmarks)){
-      var marked = bookmarks.indexOf(tab.url);
-      if(dcpGist.pageNotBookmarked(marked)){
-        chrome.browserAction.setIcon({path:'images/icon_kroger.png'});
+    if(!dcpGist.isUndefined(bookmarks) && !dcpGist.isNull(bookmarks)){
+      var bookmarkIndex = bookmarks.indexOf(tab.url);
+      if(dcpGist.pageNotBookmarked(bookmarkIndex)){
+        chrome.browserAction.setIcon({path:'images/icon.png'});
       } else {
-        chrome.browserAction.setIcon({path:'images/icon_kroger_active.png'});
+        chrome.browserAction.setIcon({path:'images/icon_active.png'});
       }
     }
   },
@@ -113,7 +144,8 @@ var dcpGist = {
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xhr.send("gist[name]=" + encodeURIComponent(obj.gistName) +
                 "&gist[path]=" + encodeURIComponent(obj.gistPath) +
-                "&gist[content]=" + encodeURIComponent(obj.gistContent));
+                "&gist[content]=" + encodeURIComponent(obj.gistContent) +
+                "&gist[unvote]=" + encodeURIComponent(obj.unvote));
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           var status = xhr.status;
@@ -155,16 +187,22 @@ var dcpGist = {
     }
   },
 
-  bookmarkPage: function(tab) {
+  markPage: function(tab, action) {
     var self = this;
+    var unvote = 'false';
     var endpoint = dcpGist.vars.gistBookmarkUrl;
     var gistName = tab.title;
     var gistPath = tab.url;
+    if(action == 'unbookmark'){
+      unvote = 'true';
+      endpoint = dcpGist.vars.voteBookmarkUrl;
+    }
     var gistContent = "Placeholder";
     //var params = "gist[name]=name&gist[path]="+ url + "&gist[content]=''";
     var response = dcpGist.makePostRequest({url:endpoint,
                                               gistName: gistName,
                                               gistPath: gistPath,
+                                              unvote: unvote,
                                               gistContent: gistContent,
                                                 overrideMimeType: "application/json",
                                                 onComplete: function(response){

@@ -19,14 +19,14 @@ var util = {
         //alert(data[0].discount_price);
         var kgUtil = this,
             iframe = document.createElement("iframe"),
-            div = document.createElement("div"); 
+            div = document.createElement("div");
 
         if(document.contains(kgUtil.iframeVars.id)){
             var oldElement = this.document.getElementById(kgUtil.iframeVars.id);
             oldElement.parentNode.removeChild(oldElement);
         }
 
-        iframe.src = url; 
+        iframe.src = url;
         iframe.id = kgUtil.iframeVars.id;
         iframe.width = "100%";
         iframe.height = kgUtil.iframeVars.height + "px";
@@ -64,7 +64,7 @@ var util = {
             var discount_price = data[0].discount_price;
 
 
-            var fullMessagePayloadString = "This product is available at kroger at  " + discount_price + "% discount";
+            var fullMessagePayloadString = "This product " + discount_price + "% discount";
 
             /*var doc = el.iframe.contentWindow.document || el.iframe.contentDocument.document;
 
@@ -137,7 +137,7 @@ var util = {
                 if (data == 'openDropdown') {
                     saIframe.style.height = saDiv.style.height = '100%';
 
-                } else if (data == 'removeNotifBar') { 
+                } else if (data == 'removeNotifBar') {
                     document.body.removeChild(saDiv);
 
                 } else if (data == 'minimizeNotifBar') {
